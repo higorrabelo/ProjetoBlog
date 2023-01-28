@@ -2,6 +2,7 @@ const Category = require('./categories/Category.js');
 
 const   express = require('express'),
         app = express(),
+        session = require('express-session'),
         bodyParser = require('body-parser'),
         connection =  require('./database/database.js');
         routes = require('./routes/routes.js'),
@@ -12,6 +13,8 @@ const   express = require('express'),
 connection.authenticate()
           .then(()=>{console.log("Conectado com sucesso")})
           .catch((erro)=>{console.log("Falha na Conexão "+erro)});
+
+   
 
 app.use(express.static("public"))
 app.set("view engine","ejs");

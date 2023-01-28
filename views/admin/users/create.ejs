@@ -1,0 +1,42 @@
+<%- include('../../partials/header.ejs')%>
+<%- include('../../partials/navbar.ejs')%>
+
+<div class="container">
+    <div class="card mt-5">
+        <div class="card-header">
+            <h1>Cadastro de usuários</h1>
+        </div>
+        <div class="card-body">
+            <form action="/admin/users/create" method="post" id="formulario" onsubmit="confirma(event,this)">
+                <label for="">Email</label>
+                <input type="email" class="form-control" placeholder="Email de Usuário" name="email">
+                <label for="">Senha</label>
+                <input type="password" class="form-control" placeholder="Senha de Usuário" name="senha" id="senha">
+                <label for="">Senha</label>
+                <input type="password" class="form-control" placeholder="Senha de Usuário" name="confirmaSenha" id="confirmaSenha">
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary mt-5">Cadastrar Usuário</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+function confirma(event,form){
+    var senha = document.getElementById("senha");
+    var confirmaSenha = document.getElementById("confirmaSenha");
+    event.preventDefault();
+    if(senha.value == confirmaSenha.value){
+        form.submit();
+    }else{
+        alert("Senhas não conferem")
+    }
+    
+}
+
+</script>
+
+<%- include('../../partials/footer.ejs')%>

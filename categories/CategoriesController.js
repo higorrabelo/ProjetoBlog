@@ -2,15 +2,35 @@ const express = require('express');
 const router = express.Router();
 const Category = require('./Category.js')
 const slugify = require('slugify')
-
+const Article = require('../articles/Article.js')
+const adminAuth = require('../middlewares/adminAuth.js');
 router
-      .get("/admin/categories/new",(req,resp)=>{
+      .get("/admin/categories/new",adminAuth,(req,resp)=>{
             resp.render("admin/categories/new")
       })
-      .get("/admin/categories",(req,resp)=>{
+      .get("/admin/categories",adminAuth,(req,resp)=>{
             Category.findAll().then(categories=>{
                   resp.render("admin/categories/index",{categories:categories});
             });
+      })
+      .get("/category/:slug",(req,resp)=>{
+            var slug = req.params.slug;
+            Category.findOne({
+                  where:{
+                        slug:slug
+                  },
+                  include:[{model: Article}]
+            }).then((category)=>{
+                  if(category!=undefined){
+                        Category.findAll().then(categories=>{
+                           resp.render("index",{articles:category.articles,categories:categories });   
+                        })
+                  }else{
+                        resp.redirect("/")
+                  }
+            }).catch(()=>{
+                  resp.redirect("/")
+            })
       })
       .post("/categories/save",(req,resp)=>{
             var title = req.body.title;
@@ -43,7 +63,7 @@ router
                   resp.redirect("/admin/categories");
             }
       })
-      .get("/admin/categories/edit/:id",(req,resp)=>{
+      .get("/admin/categories/edit/:id",adminAuth,(req,resp)=>{
             var id = req.params.id;
             
             if(isNaN(id)){
@@ -73,6 +93,7 @@ router
                   resp.redirect('/admin/categories')
             })
       })
+
 
 
 module.exports = router;
